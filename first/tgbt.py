@@ -16,41 +16,17 @@ async def help_message(message: Message):
         'а я за тобой повторю. аххаа как оригинально'
     )
 
-async def message_echo(message: Message):
-    await message.answer(text = message.text)
-
-async def photo_echo(message: Message):
-    print(message)
-    await message.reply_video(message.photo[0].file_id)
-async def video_echo(message: Message):
-    print(message)
-    await message.reply_video(message.video.file_id)
-
-async def sticker_echo(message: Message):
-    print(message)
-    await message.reply_sticker(message.sticker.file_id)
-
-async def audio_echo(message: Message):
-    print(message)
-    await message.reply_audio(message.audio.file_id)
-
-async def voice_echo(message: Message):
-    print(message)
-    await message.reply_video(message.voice.file_id)
-
-async def video_note_echo(message: Message):
-    print(message)
-    await message.reply_video(message.video_note.file_id)
+@dp.message()
+async def send_echo(message: Message):
+    try:
+        print(message.model_dump_json(indent=4, exclude_none=True))
+        await message.send_copy(chat_id=message.chat.id)
+    except TypeError:
+        message.answer(text='ха-ха соси хуй')
 
 dp.message.register(process_start_command, Command(commands='start'))
 dp.message.register(help_message, Command(commands='help'))
-dp.message.register(photo_echo, F.photo)
-dp.message.register(video_echo, F.video)
-dp.message.register(sticker_echo, F.sticker)
-dp.message.register(audio_echo, F.audio)
-dp.message.register(voice_echo, F.voice)
-dp.message.register(video_note_echo, F.video_note)
-dp.message.register(message_echo)
+
 
 
 if __name__ == '__main__':
