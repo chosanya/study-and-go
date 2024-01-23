@@ -1,10 +1,15 @@
-def anonymous_filter1(ff: str) -> bool:
-    ff = ff.lower()
-    if ff.count('я')>=23: return True
-    else: return False
+print(dir())
+
+import functions
+from data import my_dict
+from classes import *
 
 
-anonymous_filter = lambda ff: ff.lower().count('я') >= 23
-
-
-print(anonymous_filter('яяяяяяяяяяяяяяяяяяяяяяяя, яяяяяяяяяяяяяяяя и яяяяяяяя тоже!'))
+print('this is main file')
+new: int = 15
+if __name__ == '__main__':
+    print('this code doesnt work if this file will be imported as new file')
+    print(functions.get_db_num(120))
+    print(my_dict)
+    MyClass()
+    print(dir())

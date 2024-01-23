@@ -1,33 +1,41 @@
-from aiogram import Bot, Dispatcher, F
-from aiogram.filters import Command
-from aiogram.types import Message, ContentType
+import logging
+import asyncio
+from aiogram import Bot, Dispatcher, types
+from aiogram.filters.command import Command
+from aiogram.types import Message
 
+logging.basicConfig(level=logging.INFO)
 bot_token = '6742804978:AAESNA7-XrAn6dXK64tzGE3tt5EtJzxkzRY'
 bot = Bot(token = bot_token)
 dp = Dispatcher()
 
+#class Ans_Check(BaseFilter):
+#    async def __call__(self, message: Message) -> bool:
+#        for word in message:
+#            norm_ans = word.replace(',','').replace(',','').stprip()
+#        return norm_ans == ans
 
-async def process_start_command(message: Message):
-    await message.answer('Привет! я бот-попугай')
+@dp.message(Command('start'))
+async def cmd_start(message: Message):
+    await message.answer('Привет! Я - бот, который поможет тебе нарешать '
+                        'тестовую часть ЕГЭ по русскому языку. '
+                         'Напиши мне /help, чтобы узнать, что я могу.')
+@dp.message(Command('help'))
+async def cmd_help(message: Message):
+    await message.answer('Ты можешь как решать конкретные задания, так '
+                         'и решить целый вариант тестовой части, '
+                         'составленный из заданий с РЕШУЕГЭ и банка ФИПИ. '
+                         'Чтобы перейти к заданиям - напиши /menu ')
 
-async def help_message(message: Message):
-    await message.answer(
-        'напиши мне что-то'
-        'а я за тобой повторю. аххаа как оригинально'
-    )
-
-@dp.message()
-async def send_echo(message: Message):
-    try:
-        print(message.model_dump_json(indent=4, exclude_none=True))
-        await message.send_copy(chat_id=message.chat.id)
-    except TypeError:
-        message.answer(text='ха-ха соси хуй')
-
-dp.message.register(process_start_command, Command(commands='start'))
-dp.message.register(help_message, Command(commands='help'))
+@dp.message(Command('menu'))
+async def cmd_menu(message: Message):
+    await message
 
 
+
+dp.message.register(cmd_menu, Command('menu'))
+async def main():
+    await dp.start_polling(bot)
 
 if __name__ == '__main__':
-    dp.run_polling(bot)
+    asyncio.run(main())
